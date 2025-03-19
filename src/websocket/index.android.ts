@@ -23,7 +23,19 @@ export class WebsocketConnection implements IWebsocketConnection {
     }
 
     close(code: number, reason: string) {
-        return this.nativeConnection.close(code, reason);
+        try {
+            if ((code >= 1004 && code <= 1006) || (code >= 1015 && code <= 2999)) {
+                console.warn(`Code ${code} is reserved and may not be used.`);
+                // Fall back to an accepted code. Otherwise, the error will be caught by try/catch, but the connection won't be closed.
+                // https://github.com/square/okhttp/blob/master/okhttp/src/commonJvmAndroid/kotlin/okhttp3/internal/ws/WebSocketProtocol.kt#L146
+                // https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+                code = 1000; 
+            }
+            return this.nativeConnection.close(code, reason);
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 
     cancel() {
