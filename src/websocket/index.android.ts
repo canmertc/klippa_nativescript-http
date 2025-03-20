@@ -29,7 +29,7 @@ export class WebsocketConnection implements IWebsocketConnection {
                 // Fall back to an accepted code. Otherwise, the error will be caught by try/catch, but the connection won't be closed.
                 // https://github.com/square/okhttp/blob/master/okhttp/src/commonJvmAndroid/kotlin/okhttp3/internal/ws/WebSocketProtocol.kt#L146
                 // https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
-                code = 1000; 
+                code = 1001; 
             }
             return this.nativeConnection.close(code, reason);
         } catch (error) {
